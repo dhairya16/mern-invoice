@@ -4,6 +4,7 @@ import express from "express";
 import morgan from "morgan";
 import { morganMiddleware, systemLogs } from "./utils/Logger.js";
 import connectionToDB from "./config/connectDB.js";
+import mongoSanitize from "express-mongo-sanitize";
 
 await connectionToDB();
 
@@ -16,6 +17,8 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
+
+app.use(mongoSanitize());
 
 app.use(morganMiddleware);
 
