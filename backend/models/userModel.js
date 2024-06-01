@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 import "dotenv/config";
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import validator from "validator";
-import { USER } from "../constants/index";
+import { USER } from "../constants/index.js";
 
 const { Schema } = mongoose;
 
@@ -78,11 +78,11 @@ const userSchema = new Schema(
     businessName: String,
     phoneNumber: {
       type: String,
-      default: "+1234567890",
-      validate: [
-        validator.isMobilePhone,
-        "Your mobile phone number must begin with a '+', followed by your  country code then actual number e.g +254123456789",
-      ],
+      default: "+911234567890",
+      // validate: [
+      //   validator.isMobilePhone,
+      //   "Your mobile phone number must begin with a '+', followed by your  country code then actual number e.g +254123456789",
+      // ],
     },
     address: String,
     city: String,
@@ -101,14 +101,14 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-userSchema.pre("save", async (next) => {
+userSchema.pre("save", async function (next) {
   if (this.roles.length === 0) {
     this.roles.push(USER);
     next();
   }
 });
 
-userSchema.pre("save", async (next) => {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -120,7 +120,7 @@ userSchema.pre("save", async (next) => {
   next();
 });
 
-userSchema.pre("save", async () => {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password") || this.isNew) {
     return next();
   }
@@ -128,7 +128,7 @@ userSchema.pre("save", async () => {
   next();
 });
 
-userSchema.methods.comparePassword = async (givenPassword) => {
+userSchema.methods.comparePassword = async function (givenPassword) {
   return await bcrypt.compare(givenPassword, this.password);
 };
 
