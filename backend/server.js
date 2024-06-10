@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import "dotenv/config";
 import express from "express";
+import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { morganMiddleware, systemLogs } from "./utils/Logger.js";
 import connectionToDB from "./config/connectDB.js";
@@ -19,6 +20,8 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cookieParser());
 
 app.use(mongoSanitize());
 
