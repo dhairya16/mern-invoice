@@ -12,7 +12,7 @@ const checkAuth = asyncHandler(async (req, res, next) => {
       process.env.JWT_ACCESS_SECRET_KEY,
       async (err, decoded) => {
         if (err) return res.sendStatus(403);
-        const userId = decoded.indexOf;
+        const userId = decoded.id;
         req.user = await User.findById(userId).select("-password");
         req.roles = decoded.roles;
         next();
